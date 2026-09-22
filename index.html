@@ -1,115 +1,23 @@
-<!doctype html>
-<html lang="de">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Material 4.0 – QR Lager</title>
-<script src="https://unpkg.com/html5-qrcode" defer></script>
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Material 4.0</title>
+<script src="https://unpkg.com/html5-qrcode@2.3.8" defer></script>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#f4f6f8;color:#18212b}
-header{background:#17324d;color:#fff;padding:18px 16px;position:sticky;top:0;z-index:5}
-header h1{margin:0;font-size:22px} header p{margin:4px 0 0;opacity:.8;font-size:13px}
-main{max-width:720px;margin:auto;padding:16px}.card{background:white;border-radius:16px;padding:18px;margin-bottom:14px;box-shadow:0 2px 10px #00000012}
-button{border:0;border-radius:12px;padding:13px 16px;font-size:16px;font-weight:650;cursor:pointer}
-.primary{background:#17324d;color:#fff}.secondary{background:#e9eef3}.danger{background:#9b2c2c;color:#fff}
-.row{display:flex;gap:10px;flex-wrap:wrap}.row>*{flex:1;min-width:130px}
-#reader{width:100%;max-width:520px;margin:10px auto}.hidden{display:none!important}
-.info{display:grid;grid-template-columns:1fr 1fr;gap:10px}.kv{background:#f5f7f9;padding:12px;border-radius:10px}.kv small{display:block;color:#687684}.kv strong{font-size:18px}
-input{width:100%;padding:13px;border:1px solid #ccd5dd;border-radius:10px;font-size:17px}
-.stock{font-size:42px;font-weight:800}.warning{color:#9b5a00;background:#fff3d6;padding:10px;border-radius:10px;margin-top:10px}
-.log{font-size:14px;border-top:1px solid #eee;padding:10px 0}.muted{color:#697887}
-nav{display:flex;gap:8px;margin-bottom:14px}nav button{flex:1}
-</style>
-</head>
-<body>
-<header><h1>Material 4.0</h1><p>QR Ein- und Ausbuchung</p></header>
-<main>
-<nav>
-<button class="primary" onclick="show('scan')">QR scannen</button>
-<button class="secondary" onclick="show('stock')">Bestand</button>
-<button class="secondary" onclick="show('history')">Verlauf</button>
-</nav>
-
-<section id="scan">
-<div class="card">
-<h2>Material scannen</h2>
-<p class="muted">QR-Code mit der Material-ID vor die Kamera halten.</p>
-<div id="reader"></div>
-<div class="row">
-<button class="primary" onclick="startScanner()">📷 Kamera starten</button>
-<button class="secondary" onclick="stopScanner()">Stopp</button>
-</div>
-<p id="scanMsg" class="muted"></p>
-</div>
-<div id="materialCard" class="card hidden"></div>
-</section>
-
-<section id="stock" class="hidden">
-<div class="card"><h2>Aktueller Bestand</h2><div id="stockList"></div></div>
-</section>
-
-<section id="history" class="hidden">
-<div class="card"><h2>Bewegungen</h2><div id="historyList"></div></div>
-</section>
-</main>
-
-<script>
-const DEFAULT=[
- {id:"MAT-001",artikel:"Handschuhe Gr. 10",kategorie:"PSA",lagerort:"Magazin",bestand:50,mindestbestand:20,einheit:"Paar",qr:"MAT-001"},
- {id:"MAT-002",artikel:"Schutzbrille",kategorie:"PSA",lagerort:"Magazin",bestand:30,mindestbestand:10,einheit:"Stück",qr:"MAT-002"}
-];
-let materials=JSON.parse(localStorage.getItem("material40")||"null")||DEFAULT;
-let history=JSON.parse(localStorage.getItem("material40_history")||"[]");
-let scanner=null;
-
-function save(){localStorage.setItem("material40",JSON.stringify(materials));localStorage.setItem("material40_history",JSON.stringify(history));}
-function show(id){
- for(const s of ["scan","stock","history"]) document.getElementById(s).classList.toggle("hidden",s!==id);
- if(id==="stock") renderStock(); if(id==="history") renderHistory();
-}
-function startScanner(){
- if(!window.Html5Qrcode){document.getElementById("scanMsg").textContent="Scanner wird noch geladen. Bitte erneut versuchen.";return}
- if(scanner)return;
- scanner=new Html5Qrcode("reader");
- scanner.start({facingMode:"environment"},{fps:10,qrbox:{width:250,height:250}},
-  text=>{selectMaterial(text.trim());stopScanner()},()=>{}).catch(e=>{
-   document.getElementById("scanMsg").textContent="Kamera konnte nicht gestartet werden. Bitte Kamerazugriff erlauben.";
-   scanner=null;
- });
-}
-function stopScanner(){if(scanner){scanner.stop().catch(()=>{});scanner.clear();scanner=null}}
-function selectMaterial(code){
- const m=materials.find(x=>x.qr===code||x.id===code);
- if(!m){document.getElementById("scanMsg").textContent="QR-Code nicht bekannt: "+code;return}
- const c=document.getElementById("materialCard");c.classList.remove("hidden");
- c.innerHTML=`<h2>${m.artikel}</h2>
- <div class="info">
- <div class="kv"><small>Material-ID</small><strong>${m.id}</strong></div>
- <div class="kv"><small>Bestand</small><strong class="stock">${m.bestand} ${m.einheit}</strong></div>
- <div class="kv"><small>Kategorie</small><strong>${m.kategorie}</strong></div>
- <div class="kv"><small>Lagerort</small><strong>${m.lagerort}</strong></div>
- </div>
- ${m.bestand<=m.mindestbestand?`<div class="warning">⚠️ Mindestbestand erreicht/unterschritten (${m.mindestbestand} ${m.einheit})</div>`:""}
- <h3>Menge</h3><input id="qty" type="number" min="1" step="1" value="1">
- <div class="row" style="margin-top:12px">
- <button class="danger" onclick="book('${m.id}','Entnahme')">− Entnahme</button>
- <button class="primary" onclick="book('${m.id}','Rückgabe')">＋ Rückgabe</button>
- </div>`;
- c.scrollIntoView({behavior:"smooth"});
-}
-function book(id,action){
- const m=materials.find(x=>x.id===id), q=Math.floor(Number(document.getElementById("qty").value));
- if(!q||q<1)return alert("Bitte eine gültige Menge eingeben.");
- if(action==="Entnahme"&&q>m.bestand)return alert("Nicht genügend Bestand vorhanden.");
- m.bestand += action==="Rückgabe"?q:-q;
- history.unshift({time:new Date().toLocaleString("de-DE"),id:m.id,artikel:m.artikel,action,qty:q,newStock:m.bestand});
- save();selectMaterial(m.id);alert(`${action} gebucht. Neuer Bestand: ${m.bestand} ${m.einheit}`);
-}
-function renderStock(){document.getElementById("stockList").innerHTML=materials.map(m=>`
-<div class="log"><b>${m.artikel}</b><br><span class="muted">${m.id} · ${m.lagerort}</span><br>
-<strong>${m.bestand} ${m.einheit}</strong> · Mindestbestand ${m.mindestbestand} ${m.einheit}
-${m.bestand<=m.mindestbestand?' · ⚠️':''}</div>`).join("")}
-function renderHistory(){document.getElementById("historyList").innerHTML=history.length?history.map(x=>
-`<div class="log"><b>${x.action}</b> · ${x.qty}<br>${x.artikel} (${x.id})<br><span class="muted">${x.time} · neuer Bestand: ${x.newStock}</span></div>`).join(""):'<p class="muted">Noch keine Buchungen.</p>'}
-</script>
-</body></html>
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;margin:0;background:#f4f6f8;color:#18212b}header{background:#17324d;color:#fff;padding:18px}main{max-width:720px;margin:auto;padding:16px}.card{background:#fff;border-radius:16px;padding:18px;margin-bottom:14px;box-shadow:0 2px 10px #0001}button{border:0;border-radius:12px;padding:13px 16px;font-size:16px;font-weight:650}.primary{background:#17324d;color:#fff}.secondary{background:#e9eef3}.danger{background:#9b2c2c;color:#fff}.row{display:flex;gap:10px}.row>*{flex:1}#reader{width:100%;overflow:hidden;border-radius:12px}.hidden{display:none!important}.info{display:grid;grid-template-columns:1fr 1fr;gap:10px}.kv{background:#f5f7f9;padding:12px;border-radius:10px}.kv small{display:block;color:#687684}.stock{font-size:38px;font-weight:800}input{width:100%;padding:13px;border:1px solid #ccd5dd;border-radius:10px;font-size:17px;box-sizing:border-box}.warning{background:#fff3d6;padding:10px;border-radius:10px}nav{display:flex;gap:8px;margin-bottom:14px}nav button{flex:1}.log{padding:10px 0;border-top:1px solid #eee}.muted{color:#697887}
+</style></head><body><header><h1>Material 4.0</h1><div>QR Ein- und Ausbuchung</div></header><main>
+<nav><button class="primary" onclick="show('scan')">QR scannen</button><button class="secondary" onclick="show('stock')">Bestand</button><button class="secondary" onclick="show('history')">Verlauf</button></nav>
+<section id="scan"><div class="card"><h2>Material scannen</h2><p id="msg" class="muted">Kamera starten und QR-Code scannen.</p><div id="reader"></div><div class="row"><button id="start" class="primary" onclick="startScanner()">📷 Kamera starten</button><button id="stop" class="secondary hidden" onclick="stopScanner()">Stopp</button></div></div><div id="material" class="card hidden"></div></section>
+<section id="stock" class="hidden"><div class="card"><h2>Bestand</h2><div id="stocks"></div></div></section><section id="history" class="hidden"><div class="card"><h2>Verlauf</h2><div id="hist"></div></div></section>
+</main><script>
+const DEFAULT=[{id:"MAT-001",artikel:"Handschuhe Gr. 10",kategorie:"PSA",lagerort:"Magazin",bestand:50,mindestbestand:20,einheit:"Paar",qr:"MAT-001"},{id:"MAT-002",artikel:"Schutzbrille",kategorie:"PSA",lagerort:"Magazin",bestand:30,mindestbestand:10,einheit:"Stück",qr:"MAT-002"}];
+let materials=JSON.parse(localStorage.getItem("material40")||"null")||DEFAULT,history=JSON.parse(localStorage.getItem("material40_history")||"[]"),scanner=null,busy=false;
+function save(){localStorage.setItem("material40",JSON.stringify(materials));localStorage.setItem("material40_history",JSON.stringify(history))}
+function show(id){["scan","stock","history"].forEach(x=>document.getElementById(x).classList.toggle("hidden",x!==id));if(id==="stock")renderStock();if(id==="history")renderHistory()}
+function norm(x){return String(x??"").trim().replace(/[\u200B-\u200D\uFEFF]/g,"").replace(/\s+/g,"")}
+async function startScanner(){if(scanner||busy)return;busy=true;document.getElementById("msg").textContent="Kamera wird gestartet …";document.getElementById("start").classList.add("hidden");document.getElementById("stop").classList.remove("hidden");try{scanner=new Html5Qrcode("reader");await scanner.start({facingMode:{ideal:"environment"}},{fps:10,qrbox:{width:260,height:260},formatsToSupport:[Html5QrcodeSupportedFormats.QR_CODE]},onScan,()=>{});document.getElementById("msg").textContent="Bereit – QR-Code vor die Kamera halten."}catch(e){document.getElementById("msg").textContent="Kamera konnte nicht gestartet werden. Bitte Zugriff erlauben und erneut versuchen.";try{if(scanner)await scanner.clear()}catch(_){}scanner=null;document.getElementById("start").classList.remove("hidden");document.getElementById("stop").classList.add("hidden")}busy=false}
+async function stopScanner(){if(!scanner)return;let s=scanner;scanner=null;try{if(s.getState&&s.getState()===2)await s.stop()}catch(_){}try{await s.clear()}catch(_){}document.getElementById("reader").innerHTML="";document.getElementById("start").classList.remove("hidden");document.getElementById("stop").classList.add("hidden")}
+async function onScan(text){if(busy)return;busy=true;await stopScanner();select(text);busy=false}
+function select(code){let raw=String(code??""),n=norm(raw),m=materials.find(x=>norm(x.qr)===n||norm(x.id)===n);document.getElementById("msg").textContent="QR gelesen: "+raw;if(!m){document.getElementById("msg").textContent="QR-Code nicht bekannt: "+raw;return}let c=document.getElementById("material");c.classList.remove("hidden");c.innerHTML=`<h2>${m.artikel}</h2><div class="info"><div class="kv"><small>Material-ID</small><b>${m.id}</b></div><div class="kv"><small>Bestand</small><b class="stock">${m.bestand} ${m.einheit}</b></div><div class="kv"><small>Kategorie</small><b>${m.kategorie}</b></div><div class="kv"><small>Lagerort</small><b>${m.lagerort}</b></div></div>${m.bestand<=m.mindestbestand?`<p class="warning">⚠️ Mindestbestand erreicht/unterschritten</p>`:""}<h3>Menge</h3><input id="qty" type="number" min="1" value="1"><div class="row" style="margin-top:12px"><button class="danger" onclick="book('${m.id}','Entnahme')">− Entnahme</button><button class="primary" onclick="book('${m.id}','Rückgabe')">＋ Rückgabe</button></div><button class="secondary" style="width:100%;margin-top:10px" onclick="again()">📷 Nächsten QR-Code scannen</button>`}
+async function again(){document.getElementById("material").classList.add("hidden");show("scan");await startScanner()}
+function book(id,a){let m=materials.find(x=>x.id===id),q=Math.floor(Number(document.getElementById("qty").value));if(!q||q<1)return alert("Bitte eine gültige Menge eingeben.");if(a==="Entnahme"&&q>m.bestand)return alert("Nicht genügend Bestand vorhanden.");m.bestand+=a==="Rückgabe"?q:-q;history.unshift({time:new Date().toLocaleString("de-DE"),id:m.id,artikel:m.artikel,action:a,qty:q,newStock:m.bestand});save();select(m.id);alert(a+" gebucht. Neuer Bestand: "+m.bestand+" "+m.einheit)}
+function renderStock(){document.getElementById("stocks").innerHTML=materials.map(m=>`<div class="log"><b>${m.artikel}</b><br>${m.id} · ${m.bestand} ${m.einheit} · Mindestbestand ${m.mindestbestand}</div>`).join("")}
+function renderHistory(){document.getElementById("hist").innerHTML=history.length?history.map(x=>`<div class="log"><b>${x.action}</b> · ${x.qty}<br>${x.artikel} (${x.id})<br>${x.time} · neuer Bestand ${x.newStock}</div>`).join(""):"<p class=muted>Noch keine Buchungen.</p>"}
+</script></body></html>
