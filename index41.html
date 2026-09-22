@@ -1,73 +1,200 @@
+```html
 <!doctype html>
 <html lang="de">
-<head><script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+<head>
+
+<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 
 <script>
 window.OneSignalDeferred = window.OneSignalDeferred || [];
+
 OneSignalDeferred.push(async function(OneSignal) {
+
   await OneSignal.init({
     appId: "7a4ca630-35d9-4ebc-b024-936f54f0dd89",
   });
+
 });
 </script>
+
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+
 <title>Material 4.1</title>
 
 <script src="https://unpkg.com/html5-qrcode@2.3.8"></script>
 
 <style>
+
 body{
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  margin:0;background:#f4f6f8;color:#18212b
+  margin:0;
+  background:#f4f6f8;
+  color:#18212b
 }
-header{background:#17324d;color:#fff;padding:18px}
-main{max-width:720px;margin:auto;padding:16px}
+
+header{
+  background:#17324d;
+  color:#fff;
+  padding:18px
+}
+
+main{
+  max-width:720px;
+  margin:auto;
+  padding:16px
+}
+
 .card{
-  background:#fff;border-radius:16px;padding:18px;margin-bottom:14px;
+  background:#fff;
+  border-radius:16px;
+  padding:18px;
+  margin-bottom:14px;
   box-shadow:0 2px 10px #0001
 }
+
 button{
-  border:0;border-radius:12px;padding:13px 16px;
-  font-size:16px;font-weight:650
+  border:0;
+  border-radius:12px;
+  padding:13px 16px;
+  font-size:16px;
+  font-weight:650
 }
-.primary{background:#17324d;color:#fff}
-.secondary{background:#e9eef3}
-.danger{background:#9b2c2c;color:#fff}
-.row{display:flex;gap:10px}
-.row>*{flex:1}
-#reader{width:100%;overflow:hidden;border-radius:12px}
-.hidden{display:none!important}
-.info{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.kv{background:#f5f7f9;padding:12px;border-radius:10px}
-.kv small{display:block;color:#687684}
-.stock{font-size:38px;font-weight:800}
+
+.primary{
+  background:#17324d;
+  color:#fff
+}
+
+.secondary{
+  background:#e9eef3
+}
+
+.danger{
+  background:#9b2c2c;
+  color:#fff
+}
+
+.row{
+  display:flex;
+  gap:10px
+}
+
+.row>*{
+  flex:1
+}
+
+#reader{
+  width:100%;
+  overflow:hidden;
+  border-radius:12px
+}
+
+.hidden{
+  display:none!important
+}
+
+.info{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px
+}
+
+.kv{
+  background:#f5f7f9;
+  padding:12px;
+  border-radius:10px
+}
+
+.kv small{
+  display:block;
+  color:#687684
+}
+
+.stock{
+  font-size:38px;
+  font-weight:800
+}
+
 input{
-  width:100%;padding:13px;border:1px solid #ccd5dd;
-  border-radius:10px;font-size:17px;box-sizing:border-box
+  width:100%;
+  padding:13px;
+  border:1px solid #ccd5dd;
+  border-radius:10px;
+  font-size:17px;
+  box-sizing:border-box
 }
-.warning{background:#fff3d6;padding:10px;border-radius:10px}
-nav{display:flex;gap:8px;margin-bottom:14px}
-nav button{flex:1}
-.log{padding:10px 0;border-top:1px solid #eee}
-.muted{color:#697887}
+
+.warning{
+  background:#fff3d6;
+  padding:10px;
+  border-radius:10px
+}
+
+nav{
+  display:flex;
+  gap:8px;
+  margin-bottom:14px
+}
+
+nav button{
+  flex:1
+}
+
+.log{
+  padding:10px 0;
+  border-top:1px solid #eee
+}
+
+.muted{
+  color:#697887
+}
+
+.success{
+  background:#e2f7e8;
+  padding:10px;
+  border-radius:10px
+}
+
 </style>
+
 </head>
 
 <body>
 
 <header>
+
 <h1>Material 4.1</h1>
+
 <div>QR Ein- und Ausbuchung</div>
+
 </header>
+
 
 <main>
 
 <nav>
-<button class="primary" onclick="show('scan')">QR scannen</button>
-<button class="secondary" onclick="show('stock')">Bestand</button>
-<button class="secondary" onclick="show('history')">Verlauf</button>
+
+<button
+class="primary"
+onclick="show('scan')">
+QR scannen
+</button>
+
+<button
+class="secondary"
+onclick="show('stock')">
+Bestand
+</button>
+
+<button
+class="secondary"
+onclick="show('history')">
+Verlauf
+</button>
+
 </nav>
+
 
 <section id="scan">
 
@@ -76,7 +203,7 @@ nav button{flex:1}
 <h2>Material scannen</h2>
 
 <p id="msg" class="muted">
-Kamera starten und QR-Code scannen.
+Materialbestand wird geladen …
 </p>
 
 <div id="reader"></div>
@@ -101,31 +228,47 @@ Stopp
 
 </div>
 
-<div id="material" class="card hidden"></div>
+
+<div
+id="material"
+class="card hidden">
+</div>
 
 </section>
 
 
-<section id="stock" class="hidden">
+<section
+id="stock"
+class="hidden">
 
 <div class="card">
 
 <h2>Bestand</h2>
 
-<div id="stocks"></div>
+<div id="stocks">
+<p class="muted">
+Bestand wird geladen …
+</p>
+</div>
 
 </div>
 
 </section>
 
 
-<section id="history" class="hidden">
+<section
+id="history"
+class="hidden">
 
 <div class="card">
 
 <h2>Verlauf</h2>
 
-<div id="hist"></div>
+<div id="hist">
+<p class="muted">
+Verlauf wird geladen …
+</p>
+</div>
 
 </div>
 
@@ -136,628 +279,937 @@ Stopp
 
 <script>
 
-const DEFAULT=[
+/*
+================================================
+SUPABASE
+================================================
+*/
 
-{
-id:"MAT-001",
-artikel:"Handschuhe Gr. 10",
-kategorie:"PSA",
-lagerort:"Magazin",
-bestand:50,
-mindestbestand:20,
-einheit:"Paar",
-qr:"MAT-001"
-},
+const SUPABASE_URL =
+"https://ihgyfihlzbsdnbusynrz.supabase.co";
 
-{
-id:"MAT-002",
-artikel:"Schutzbrille",
-kategorie:"PSA",
-lagerort:"Magazin",
-bestand:30,
-mindestbestand:10,
-einheit:"Stück",
-qr:"MAT-002"
-}
+const SUPABASE_KEY =
+"sb_publishable_tWAzMhdZcU4v2Ki9diNT1A_ku6-J467";
 
-];
+const FUNCTION_URL =
+SUPABASE_URL +
+"/functions/v1/smooth-service";
 
 
-let materials=
-JSON.parse(localStorage.getItem("material40")||"null")
-||DEFAULT;
+/*
+================================================
+DATEN
+================================================
+*/
 
-let history=
-JSON.parse(localStorage.getItem("material40_history")||"[]");
+let materials = [];
 
-let scanner=null;
+let history = [];
 
-let busy=false;
+let scanner = null;
 
-
-function save(){
-
-localStorage.setItem(
-"material40",
-JSON.stringify(materials)
-);
-
-localStorage.setItem(
-"material40_history",
-JSON.stringify(history)
-);
-
-}
+let busy = false;
 
 
-function show(id){
+/*
+================================================
+SUPABASE DATEN LADEN
+================================================
+*/
 
-["scan","stock","history"].forEach(
-x=>document.getElementById(x)
-.classList.toggle("hidden",x!==id)
-);
+async function loadMaterials(){
 
-if(id==="stock")
-renderStock();
+  try{
 
-if(id==="history")
-renderHistory();
+    const response = await fetch(
+      SUPABASE_URL +
+      "/rest/v1/materials?select=*&order=id",
+      {
+        method:"GET",
 
-}
+        headers:{
+          "apikey":SUPABASE_KEY,
+          "Authorization":
+            "Bearer " + SUPABASE_KEY
+        }
+      }
+    );
 
 
-function norm(x){
+    if(!response.ok){
 
-return String(x??"")
-.trim()
-.replace(/[\u200B-\u200D\uFEFF]/g,"")
-.replace(/\s+/g,"");
+      throw new Error(
+        "Materialdaten konnten nicht geladen werden."
+      );
+
+    }
+
+
+    materials = await response.json();
+
+
+    if(!Array.isArray(materials)){
+
+      throw new Error(
+        "Ungültige Materialdaten."
+      );
+
+    }
+
+
+    document.getElementById("msg")
+      .textContent =
+      "Bereit – QR-Code vor die Kamera halten.";
+
+
+    renderStock();
+
+
+  }catch(error){
+
+    console.error(error);
+
+    document.getElementById("msg")
+      .textContent =
+      "Fehler beim Laden des Materialbestands.";
+
+  }
 
 }
 
 
 /*
-------------------------------------------------
+================================================
+HISTORIE LADEN
+================================================
+*/
+
+async function loadHistory(){
+
+  try{
+
+    const response = await fetch(
+      SUPABASE_URL +
+      "/rest/v1/material_history?select=*&order=created_at.desc",
+      {
+        method:"GET",
+
+        headers:{
+          "apikey":SUPABASE_KEY,
+          "Authorization":
+            "Bearer " + SUPABASE_KEY
+        }
+      }
+    );
+
+
+    if(!response.ok){
+
+      throw new Error(
+        "Verlauf konnte nicht geladen werden."
+      );
+
+    }
+
+
+    history = await response.json();
+
+
+    renderHistory();
+
+
+  }catch(error){
+
+    console.error(error);
+
+    document.getElementById("hist")
+      .innerHTML =
+      "<p class='muted'>Verlauf konnte nicht geladen werden.</p>";
+
+  }
+
+}
+
+
+/*
+================================================
+ANSICHT
+================================================
+*/
+
+function show(id){
+
+  ["scan","stock","history"].forEach(
+    x => {
+
+      document
+        .getElementById(x)
+        .classList
+        .toggle("hidden",x!==id);
+
+    }
+  );
+
+
+  if(id==="stock"){
+
+    loadMaterials();
+
+  }
+
+
+  if(id==="history"){
+
+    loadHistory();
+
+  }
+
+}
+
+
+/*
+================================================
+NORMALISIEREN
+================================================
+*/
+
+function norm(x){
+
+  return String(x ?? "")
+    .trim()
+    .replace(/[\u200B-\u200D\uFEFF]/g,"")
+    .replace(/\s+/g,"");
+
+}
+
+
+/*
+================================================
 KAMERA
-------------------------------------------------
+================================================
 */
 
 async function startScanner(){
 
-if(scanner || busy)
-return;
-
-busy=true;
-
-document.getElementById("msg")
-.textContent="Kamera wird gestartet …";
-
-document.getElementById("start")
-.classList.add("hidden");
-
-document.getElementById("stop")
-.classList.remove("hidden");
+  if(scanner || busy)
+    return;
 
 
-try{
-
-/*
-Wichtig für iPhone:
-Die Kamera wird direkt über Safari's
-getUserMedia gestartet.
-*/
-
-if(
-!window.isSecureContext ||
-!navigator.mediaDevices ||
-!navigator.mediaDevices.getUserMedia
-){
-
-throw new Error(
-"Kamera API nicht verfügbar"
-);
-
-}
+  busy=true;
 
 
-/*
-Alten Scanner sicher entfernen
-*/
-
-if(scanner){
-
-try{
-
-await scanner.stop();
-
-}catch(e){}
-
-try{
-
-await scanner.clear();
-
-}catch(e){}
-
-scanner=null;
-
-}
+  document.getElementById("msg")
+    .textContent =
+    "Kamera wird gestartet …";
 
 
-/*
-Neuen Scanner erzeugen
-*/
-
-scanner=new Html5Qrcode("reader");
+  document.getElementById("start")
+    .classList
+    .add("hidden");
 
 
-/*
-Kamera starten.
-
-Wichtig:
-Wir übergeben NICHT mehr eine vorher
-ermittelte Kamera-ID.
-
-Dadurch kann Safari selbst die Kamera
-auswählen.
-*/
-
-await scanner.start(
-
-{
-facingMode:"environment"
-},
-
-{
-fps:10,
-qrbox:{
-width:250,
-height:250
-},
-aspectRatio:1.0
-},
-
-onScan,
-
-(errorMessage)=>{
-
-/*
-Normale Nicht-Erkennung wird ignoriert.
-*/
-
-}
-
-);
+  document.getElementById("stop")
+    .classList
+    .remove("hidden");
 
 
-document.getElementById("msg")
-.textContent=
-"Bereit – QR-Code vor die Kamera halten.";
+  try{
 
-}
 
-catch(e){
+    if(
+      !window.isSecureContext ||
+      !navigator.mediaDevices ||
+      !navigator.mediaDevices.getUserMedia
+    ){
 
-console.error(e);
+      throw new Error(
+        "Kamera API nicht verfügbar"
+      );
 
-document.getElementById("msg")
-.textContent=
-"Kamera konnte nicht gestartet werden. Bitte Safari den Kamerazugriff für diese Website erlauben.";
+    }
 
-try{
 
-if(scanner){
+    if(scanner){
 
-await scanner.clear();
+      try{
+        await scanner.stop();
+      }catch(e){}
 
-}
+      try{
+        await scanner.clear();
+      }catch(e){}
 
-}catch(_){}
+      scanner=null;
 
-scanner=null;
+    }
 
-document.getElementById("start")
-.classList.remove("hidden");
 
-document.getElementById("stop")
-.classList.add("hidden");
+    scanner =
+      new Html5Qrcode("reader");
 
-}
 
-busy=false;
+    await scanner.start(
+
+      {
+        facingMode:"environment"
+      },
+
+      {
+        fps:10,
+
+        qrbox:{
+          width:250,
+          height:250
+        },
+
+        aspectRatio:1.0
+      },
+
+      onScan,
+
+      () => {}
+
+    );
+
+
+    document.getElementById("msg")
+      .textContent =
+      "Bereit – QR-Code vor die Kamera halten.";
+
+
+  }catch(e){
+
+    console.error(e);
+
+
+    document.getElementById("msg")
+      .textContent =
+      "Kamera konnte nicht gestartet werden. Bitte Safari den Kamerazugriff erlauben.";
+
+
+    try{
+
+      if(scanner)
+        await scanner.clear();
+
+    }catch(_){}
+
+
+    scanner=null;
+
+
+    document.getElementById("start")
+      .classList
+      .remove("hidden");
+
+
+    document.getElementById("stop")
+      .classList
+      .add("hidden");
+
+  }
+
+
+  busy=false;
 
 }
 
 
 /*
+================================================
 KAMERA STOPPEN
+================================================
 */
 
 async function stopScanner(){
 
-if(!scanner)
-return;
-
-const current=scanner;
-
-scanner=null;
-
-try{
-
-const state=
-current.getState
-?
-current.getState()
-:null;
-
-if(state===2){
-
-await current.stop();
-
-}
-
-}catch(e){}
-
-try{
-
-await current.clear();
-
-}catch(e){}
+  if(!scanner)
+    return;
 
 
-document.getElementById("reader")
-.innerHTML="";
+  const current=scanner;
 
-document.getElementById("start")
-.classList.remove("hidden");
+  scanner=null;
 
-document.getElementById("stop")
-.classList.add("hidden");
+
+  try{
+
+    const state =
+      current.getState
+      ?
+      current.getState()
+      :
+      null;
+
+
+    if(state===2){
+
+      await current.stop();
+
+    }
+
+  }catch(e){}
+
+
+  try{
+
+    await current.clear();
+
+  }catch(e){}
+
+
+  document.getElementById("reader")
+    .innerHTML="";
+
+
+  document.getElementById("start")
+    .classList
+    .remove("hidden");
+
+
+  document.getElementById("stop")
+    .classList
+    .add("hidden");
 
 }
 
 
 /*
+================================================
 QR CODE ERKANNT
+================================================
 */
 
 async function onScan(text){
 
-if(busy)
-return;
+  if(busy)
+    return;
 
-busy=true;
 
-await stopScanner();
+  busy=true;
 
-select(text);
 
-busy=false;
+  await stopScanner();
+
+
+  select(text);
+
+
+  busy=false;
 
 }
 
 
 /*
+================================================
 MATERIAL AUSWÄHLEN
+================================================
 */
 
 function select(code){
 
-let raw=String(code??"");
-
-let n=norm(raw);
-
-let m=materials.find(
-x=>
-norm(x.qr)===n ||
-norm(x.id)===n
-);
+  const raw =
+    String(code ?? "");
 
 
-document.getElementById("msg")
-.textContent=
-"QR gelesen: "+raw;
+  const n =
+    norm(raw);
 
 
-if(!m){
-
-document.getElementById("msg")
-.textContent=
-"QR-Code nicht bekannt: "+raw;
-
-return;
-
-}
+  const m =
+    materials.find(
+      x =>
+        norm(x.qr)===n ||
+        norm(x.id)===n
+    );
 
 
-let c=
-document.getElementById("material");
-
-c.classList.remove("hidden");
-
-
-c.innerHTML=`
-
-<h2>${m.artikel}</h2>
-
-<div class="info">
-
-<div class="kv">
-<small>Material-ID</small>
-<b>${m.id}</b>
-</div>
-
-<div class="kv">
-<small>Bestand</small>
-<b class="stock">
-${m.bestand} ${m.einheit}
-</b>
-</div>
-
-<div class="kv">
-<small>Kategorie</small>
-<b>${m.kategorie}</b>
-</div>
-
-<div class="kv">
-<small>Lagerort</small>
-<b>${m.lagerort}</b>
-</div>
-
-</div>
+  document.getElementById("msg")
+    .textContent =
+    "QR gelesen: " + raw;
 
 
-${m.bestand<=m.mindestbestand?
+  if(!m){
 
-`<p class="warning">
-⚠️ Mindestbestand erreicht/unterschritten
-</p>`
+    document.getElementById("msg")
+      .textContent =
+      "QR-Code nicht bekannt: " + raw;
 
-:""}
+    return;
 
-
-<h3>Menge</h3>
-
-<input
-id="qty"
-type="number"
-min="1"
-value="1"
->
+  }
 
 
-<div
-class="row"
-style="margin-top:12px"
->
-
-<button
-class="danger"
-onclick="book('${m.id}','Entnahme')"
->
-− Entnahme
-</button>
-
-<button
-class="primary"
-onclick="book('${m.id}','Rückgabe')"
->
-＋ Rückgabe
-</button>
-
-</div>
+  const c =
+    document.getElementById("material");
 
 
-<button
-class="secondary"
-style="width:100%;margin-top:10px"
-onclick="again()"
->
-📷 Nächsten QR-Code scannen
-</button>
+  c.classList.remove("hidden");
 
-`;
+
+  c.innerHTML = `
+
+    <h2>${m.artikel}</h2>
+
+    <div class="info">
+
+      <div class="kv">
+
+        <small>Material-ID</small>
+
+        <b>${m.id}</b>
+
+      </div>
+
+
+      <div class="kv">
+
+        <small>Bestand</small>
+
+        <b class="stock">
+
+          ${m.bestand}
+          ${m.einheit}
+
+        </b>
+
+      </div>
+
+
+      <div class="kv">
+
+        <small>Kategorie</small>
+
+        <b>${m.kategorie}</b>
+
+      </div>
+
+
+      <div class="kv">
+
+        <small>Lagerort</small>
+
+        <b>${m.lagerort}</b>
+
+      </div>
+
+    </div>
+
+
+    ${
+      m.bestand < m.mindestbestand
+
+      ?
+
+      `
+      <p class="warning">
+
+        ⚠️ Bestand unter Mindestbestand
+
+      </p>
+      `
+
+      :
+
+      ""
+    }
+
+
+    <h3>Menge</h3>
+
+
+    <input
+      id="qty"
+      type="number"
+      min="1"
+      value="1"
+    >
+
+
+    <div
+      class="row"
+      style="margin-top:12px"
+    >
+
+      <button
+        class="danger"
+        onclick="book('${m.id}','Entnahme')"
+      >
+
+        − Entnahme
+
+      </button>
+
+
+      <button
+        class="primary"
+        onclick="book('${m.id}','Rückgabe')"
+      >
+
+        ＋ Rückgabe
+
+      </button>
+
+    </div>
+
+
+    <button
+      class="secondary"
+      style="width:100%;margin-top:10px"
+      onclick="again()"
+    >
+
+      📷 Nächsten QR-Code scannen
+
+    </button>
+
+  `;
 
 }
 
 
 /*
+================================================
 NÄCHSTER SCAN
+================================================
 */
 
 async function again(){
 
-document
-.getElementById("material")
-.classList.add("hidden");
+  document
+    .getElementById("material")
+    .classList
+    .add("hidden");
 
-show("scan");
 
-await startScanner();
+  show("scan");
+
+
+  await startScanner();
 
 }
 
 
 /*
-BUCHUNG
+================================================
+BUCHUNG ÜBER EDGE FUNCTION
+================================================
 */
 
-function book(id,a){
+async function book(id,a){
 
-let m=
-materials.find(x=>x.id===id);
-
-let q=
-Math.floor(
-Number(
-document.getElementById("qty").value
-)
-);
+  const qtyInput =
+    document.getElementById("qty");
 
 
-if(!q || q<1){
-
-alert(
-"Bitte eine gültige Menge eingeben."
-);
-
-return;
-
-}
+  const q =
+    Math.floor(
+      Number(qtyInput.value)
+    );
 
 
-if(
-a==="Entnahme" &&
-q>m.bestand
-){
+  if(!q || q<1){
 
-alert(
-"Nicht genügend Bestand vorhanden."
-);
+    alert(
+      "Bitte eine gültige Menge eingeben."
+    );
 
-return;
+    return;
 
-}
+  }
 
 
-m.bestand +=
-a==="Rückgabe"
-?q
-:-q;
+  const action =
+    a==="Entnahme"
+    ?
+    "book"
+    :
+    "return";
 
 
-history.unshift({
+  try{
 
-time:
-new Date()
-.toLocaleString("de-DE"),
-
-id:m.id,
-
-artikel:m.artikel,
-
-action:a,
-
-qty:q,
-
-newStock:m.bestand
-
-});
+    document.getElementById("msg")
+      .textContent =
+      "Buchung wird gespeichert …";
 
 
-save();
+    /*
+    Edge Function aufrufen
+    */
 
-select(m.id);
+    const response =
+      await fetch(
+        FUNCTION_URL,
+        {
+          method:"POST",
+
+          headers:{
+            "Content-Type":
+              "application/json",
+
+            "apikey":
+              SUPABASE_KEY
+          },
+
+          body:JSON.stringify({
+
+            id:id,
+
+            action:action,
+
+            qty:q
+
+          })
+
+        }
+      );
 
 
-alert(
-a+
-" gebucht. Neuer Bestand: "+
-m.bestand+
-" "+
-m.einheit
-);
+    const result =
+      await response.json();
+
+
+    if(!response.ok || !result.success){
+
+      throw new Error(
+        result.error ||
+        "Buchung fehlgeschlagen."
+      );
+
+    }
+
+
+    /*
+    Zentrale Daten neu laden
+    */
+
+    await loadMaterials();
+
+
+    /*
+    Material mit aktuellem Bestand anzeigen
+    */
+
+    const updated =
+      materials.find(
+        x=>x.id===id
+      );
+
+
+    if(updated){
+
+      select(updated.id);
+
+    }
+
+
+    document.getElementById("msg")
+      .textContent =
+      "Buchung erfolgreich gespeichert.";
+
+
+    alert(
+
+      a +
+      " gebucht.\n\nNeuer Bestand: " +
+      result.newStock +
+      " " +
+      (updated?.einheit || "")
+
+    );
+
+
+  }catch(error){
+
+    console.error(error);
+
+
+    document.getElementById("msg")
+      .textContent =
+      "Buchung konnte nicht gespeichert werden.";
+
+
+    alert(
+      "Fehler bei der Buchung:\n\n" +
+      error.message
+    );
+
+  }
 
 }
 
 
 /*
+================================================
 BESTAND
+================================================
 */
 
 function renderStock(){
 
-document.getElementById("stocks")
-.innerHTML=
+  document.getElementById("stocks")
+    .innerHTML =
 
-materials.map(m=>`
+    materials.map(m=>`
 
-<div class="log">
+      <div class="log">
 
-<b>${m.artikel}</b>
+        <b>${m.artikel}</b>
 
-<br>
+        <br>
 
-${m.id}
-·
-${m.bestand}
-${m.einheit}
-·
-Mindestbestand
-${m.mindestbestand}
+        ${m.id}
 
-</div>
+        ·
 
-`).join("");
+        ${m.bestand}
+        ${m.einheit}
+
+        ·
+
+        Mindestbestand
+        ${m.mindestbestand}
+
+        ${
+          m.bestand < m.mindestbestand
+
+          ?
+
+          `
+          <br>
+          <span class="warning">
+            ⚠️ Unter Mindestbestand
+          </span>
+          `
+
+          :
+
+          ""
+        }
+
+      </div>
+
+    `).join("");
 
 }
 
 
 /*
+================================================
 VERLAUF
+================================================
 */
 
 function renderHistory(){
 
-document.getElementById("hist")
-.innerHTML=
+  document.getElementById("hist")
+    .innerHTML =
 
-history.length
+    history.length
 
-?
+    ?
 
-history.map(x=>`
+    history.map(x=>`
 
-<div class="log">
+      <div class="log">
 
-<b>${x.action}</b>
-·
-${x.qty}
+        <b>
+          ${
+            x.action==="book"
+            ?
+            "Entnahme"
+            :
+            "Rückgabe"
+          }
+        </b>
 
-<br>
+        ·
 
-${x.artikel}
-(${x.id})
+        ${x.qty}
 
-<br>
+        <br>
 
-${x.time}
-· neuer Bestand
-${x.newStock}
+        ${x.artikel}
 
-</div>
+        (${x.material_id})
 
-`).join("")
+        <br>
 
-:
+        ${
+          new Date(x.created_at)
+          .toLocaleString("de-DE")
+        }
 
-"<p class=muted>Noch keine Buchungen.</p>";
+        · neuer Bestand
+
+        ${x.new_stock}
+
+      </div>
+
+    `).join("")
+
+    :
+
+    "<p class='muted'>Noch keine Buchungen.</p>";
 
 }
 
 
 /*
-WICHTIG:
-KAMERA BEIM VERLASSEN
-DER SEITE STOPPEN
+================================================
+START
+================================================
+*/
+
+async function init(){
+
+  document.getElementById("msg")
+    .textContent =
+    "Materialbestand wird geladen …";
+
+
+  await loadMaterials();
+
+
+  await loadHistory();
+
+}
+
+
+/*
+================================================
+KAMERA BEIM VERLASSEN STOPPEN
+================================================
 */
 
 window.addEventListener(
-"pagehide",
-()=>{
-stopScanner();
-}
+  "pagehide",
+  () => {
+    stopScanner();
+  }
 );
+
 
 document.addEventListener(
-"visibilitychange",
-()=>{
-if(document.hidden)
-stopScanner();
-}
+  "visibilitychange",
+  () => {
+
+    if(document.hidden)
+      stopScanner();
+
+  }
 );
 
+
+/*
+APP STARTEN
+*/
+
+init();
 
 </script>
 
 </body>
 </html>
+```
